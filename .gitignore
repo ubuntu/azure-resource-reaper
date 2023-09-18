@@ -28,6 +28,9 @@ dist
 # Local python packages
 .python_packages/
 
+# Python coverage
+.coverage
+
 # Python Environments
 .env
 .venv
