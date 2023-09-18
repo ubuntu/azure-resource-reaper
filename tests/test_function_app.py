@@ -23,32 +23,33 @@ class TestFunction(unittest.TestCase):
     def setUp(self):
         logging.disable(logging.CRITICAL)
 
+        datetime_at_creation = datetime.datetime(2023, 9, 14, 11, 0, tzinfo=datetime.timezone.utc)
         patcher = patch('function_app.ResourceManagementClient', autospec=True)
         self.addCleanup(patcher.stop)
         self.mock_resource_client = patcher.start().return_value
         self.mock_resource_client.resources.list_by_resource_group.side_effect = lambda rg, **kwargs: {
             'rg1': [
-                Resource(id='rg1nic1', name='rg1nic1', type='Microsoft.Network/networkInterfaces', tags={'lifetime': '12h 30m'}, managed_by=None, created_time=datetime.datetime(2023, 9, 14, 11, 0)),
-                Resource(id='rg1nic2', name='rg1nic2', type='Microsoft.Network/networkInterfaces', tags={'lifetime': '30m'}, managed_by=None, created_time=datetime.datetime(2023, 9, 14, 11, 0)),
-                Resource(id='rg1vm1', name='rg1vm1', type='Microsoft.Compute/virtualMachines', tags={'lifetime': '1h 12m'}, managed_by=None, created_time=datetime.datetime(2023, 9, 14, 11, 0)),
-                Resource(id='rg1disk1', name='rg1disk1', type='Microsoft.Compute/disks', tags={'lifetime': '10m'}, managed_by="some_other_resource", created_time=datetime.datetime(2023, 9, 14, 11, 0)),
-                Resource(id='rg1noapi', name='rg1noapi', type='Microsoft.Network/noApiVersion', tags={'lifetime': '5m'}, managed_by=None, created_time=datetime.datetime(2023, 9, 14, 11, 0)),
-                Resource(id='rg1noprovider', name='rg1noprovider', type='Microsoft.Network/noProvider', tags={'lifetime': '1h 1m'}, managed_by=None, created_time=datetime.datetime(2023, 9, 14, 11, 0)),
+                Resource(id='rg1nic1', name='rg1nic1', type='Microsoft.Network/networkInterfaces', tags={'lifetime': '12h 30m'}, managed_by=None, created_time=datetime_at_creation),
+                Resource(id='rg1nic2', name='rg1nic2', type='Microsoft.Network/networkInterfaces', tags={'lifetime': '30m'}, managed_by=None, created_time=datetime_at_creation),
+                Resource(id='rg1vm1', name='rg1vm1', type='Microsoft.Compute/virtualMachines', tags={'lifetime': '1h 12m'}, managed_by=None, created_time=datetime_at_creation),
+                Resource(id='rg1disk1', name='rg1disk1', type='Microsoft.Compute/disks', tags={'lifetime': '10m'}, managed_by="some_other_resource", created_time=datetime_at_creation),
+                Resource(id='rg1noapi', name='rg1noapi', type='Microsoft.Network/noApiVersion', tags={'lifetime': '5m'}, managed_by=None, created_time=datetime_at_creation),
+                Resource(id='rg1noprovider', name='rg1noprovider', type='Microsoft.Network/noProvider', tags={'lifetime': '1h 1m'}, managed_by=None, created_time=datetime_at_creation),
             ],
             'rg2': [
-                Resource(id='rg2notag', name='rg2notag', type='Microsoft.Network/networkInterfaces', tags={}, managed_by=None, created_time=datetime.datetime(2023, 9, 14, 11, 0)),
-                Resource(id='rg2notags', name='rg2notags', type='Microsoft.Network/networkInterfaces', tags=None, managed_by=None, created_time=datetime.datetime(2023, 9, 14, 11, 0)),
-                Resource(id='rg2nic1', name='rg2nic1', type='Microsoft.Network/networkInterfaces', tags={'lifetime': '100d'}, managed_by=None, created_time=datetime.datetime(2023, 9, 14, 11, 0)),
-                Resource(id='rg2vm1', name='rg2vm1', type='Microsoft.Compute/virtualMachines', tags={'lifetime': '3h 30m'}, managed_by=None, created_time=datetime.datetime(2023, 9, 14, 11, 0)),
-                Resource(id='rg2vm2', name='rg2vm2', type='Microsoft.Compute/virtualMachines', tags={'lifetime': 'not parsable'}, managed_by=None, created_time=datetime.datetime(2023, 9, 14, 11, 0)),
-                Resource(id='rg2vm3', name='rg2vm3', type='Microsoft.Compute/virtualMachines', tags={'lifetime': '1h'}, managed_by=None, created_time=datetime.datetime(2023, 9, 14, 11, 0)),
+                Resource(id='rg2notag', name='rg2notag', type='Microsoft.Network/networkInterfaces', tags={}, managed_by=None, created_time=datetime_at_creation),
+                Resource(id='rg2notags', name='rg2notags', type='Microsoft.Network/networkInterfaces', tags=None, managed_by=None, created_time=datetime_at_creation),
+                Resource(id='rg2nic1', name='rg2nic1', type='Microsoft.Network/networkInterfaces', tags={'lifetime': '100d'}, managed_by=None, created_time=datetime_at_creation),
+                Resource(id='rg2vm1', name='rg2vm1', type='Microsoft.Compute/virtualMachines', tags={'lifetime': '3h 30m'}, managed_by=None, created_time=datetime_at_creation),
+                Resource(id='rg2vm2', name='rg2vm2', type='Microsoft.Compute/virtualMachines', tags={'lifetime': 'not parsable'}, managed_by=None, created_time=datetime_at_creation),
+                Resource(id='rg2vm3', name='rg2vm3', type='Microsoft.Compute/virtualMachines', tags={'lifetime': '1h'}, managed_by=None, created_time=datetime_at_creation),
             ],
             'rg3': [
-                Resource(id='rg3res1', name='rg3res1', type='Microsoft.Network/networkInterfaces', tags={'lifetime': '1m'}, managed_by=None, created_time=datetime.datetime(2023, 9, 14, 11, 0)),
+                Resource(id='rg3res1', name='rg3res1', type='Microsoft.Network/networkInterfaces', tags={'lifetime': '1m'}, managed_by=None, created_time=datetime_at_creation),
             ],
         }[rg]
 
-        datetime_to_patch = datetime.datetime(2023, 9, 14, 12, 40)
+        datetime_to_patch = datetime.datetime(2023, 9, 14, 12, 40, tzinfo=datetime.timezone.utc)
         datetime_patcher = patch('datetime.datetime', wraps=datetime.datetime)
         self.addCleanup(datetime_patcher.stop)
         self.mock_datetime = datetime_patcher.start()

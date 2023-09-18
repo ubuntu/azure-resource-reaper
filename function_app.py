@@ -63,8 +63,8 @@ def reap_resources(timer: func.TimerRequest) -> None:
             # Parse lifetime tag
             lifetime = datetime_with_lifetime(resource.created_time, tags['lifetime'])
 
-            # Check if resource is older than lifetime
-            if datetime.datetime.now() < lifetime:
+            # Check if resource is older than lifetime (Azure uses UTC time)
+            if datetime.datetime.now(tz=datetime.timezone.utc) < lifetime:
                 continue
 
             logging.info('Resource %s is older than lifetime %s', resource.name, lifetime)
