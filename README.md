@@ -24,11 +24,12 @@ be assigned to resources.
 
 The `lifetime` tag format is a succession of `<value><unit>` stanzas where
 `<value>` is an integer and `<unit>` is one of the following:
-    - y: years
-    - mo: months
-    - d: days
-    - h: hours
-    - m: minutes
+
+- y: years
+- mo: months
+- d: days
+- h: hours
+- m: minutes
 
 ## Setup
 
